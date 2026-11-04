@@ -13,7 +13,11 @@ final class Bridge {
     private final Path engine;
 
     Bridge() throws IOException {
-        engine = Paths.get(PathManager.getSystemPath(), "multi-repo-sync", "engine-0.2.0");
+        this(Paths.get(PathManager.getSystemPath(), "multi-repo-sync", "engine-0.2.1"));
+    }
+
+    Bridge(Path engineDirectory) throws IOException {
+        engine = engineDirectory;
         Files.createDirectories(engine);
         for (String name : List.of("git_sync.py", "snapshot_sync.py", "ide_bridge.py")) {
             try (InputStream stream = Bridge.class.getResourceAsStream("/engine/" + name)) {
@@ -24,12 +28,9 @@ final class Bridge {
     }
 
     JsonObject call(String python, String config, String operation, String repo, JsonObject request) throws Exception {
-        List<String> command = new ArrayList<>();
-        command.add(python);
-        if (Paths.get(python).getFileName().toString().matches("(?i)py(?:\\.exe)?")) command.add("-3");
-        command.addAll(List.of(engine.resolve("ide_bridge.py").toString(), "--config", config, operation));
-        if (repo != null) command.addAll(List.of("--repo", repo));
-        Process process = new ProcessBuilder(command).directory(engine.toFile()).start();
+        List<String> arguments = new ArrayList<>(List.of(engine.resolve("ide_bridge.py").toString(), "--config", config, operation));
+        if (repo != null) arguments.addAll(List.of("--repo", repo));
+        Process process = PythonCommand.start(python, arguments, engine);
         ExecutorService readers = Executors.newFixedThreadPool(2);
         try {
             Future<String> stdout = readers.submit(() -> new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8));
@@ -58,4 +59,5 @@ final class Bridge {
             readers.shutdownNow();
         }
     }
+
 }

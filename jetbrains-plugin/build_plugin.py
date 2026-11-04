@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 import os
+import xml.etree.ElementTree as ET
 import shutil
 import subprocess
 import sys
@@ -47,7 +48,8 @@ def main():
         archive.write(root / "LICENSE", "META-INF/LICENSE")
     distribution = root / "dist"
     distribution.mkdir(exist_ok=True)
-    target = distribution / "multi-repo-sync-0.2.0.zip"
+    version = ET.parse(project / "src" / "main" / "resources" / "META-INF" / "plugin.xml").getroot().findtext("version")
+    target = distribution / f"multi-repo-sync-{version}.zip"
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.write(plugin_jar, "multi-repo-sync/lib/multi-repo-sync.jar")
     print(target)

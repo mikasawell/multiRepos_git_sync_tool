@@ -17,7 +17,7 @@
 
 ### 1. 安装插件
 
-1. 下载 [multi-repo-sync-0.2.0.zip](dist/multi-repo-sync-0.2.0.zip)，复制到电脑 2。GitHub 文件页可点击下载按钮获取原始 ZIP，保持 ZIP 原样。
+1. 下载 [multi-repo-sync-0.2.1.zip](dist/multi-repo-sync-0.2.1.zip)，复制到电脑 2。GitHub 文件页可点击下载按钮获取原始 ZIP，保持 ZIP 原样。
 2. 在 PyCharm 中打开 `Settings / Preferences → Plugins → 齿轮菜单 → Install Plugin from Disk…`，选择这个插件 ZIP。
 3. 按 IDE 提示重启，打开电脑 2 的业务项目。
 4. 通过 `View → Tool Windows → Multi Repo Sync` 打开插件。
@@ -25,6 +25,15 @@
 ### 2. 在界面中初始化
 
 插件顶部的 `Python 3.9+` 填系统可执行文件名称或解释器完整路径：Windows 可用 `py` 或 `python.exe` 的路径，macOS/Linux 可用 `python3` 或绝对路径。`配置文件` 可放在仓库外；已有配置时点击「加载配置」。
+
+两项都保留手动输入或右侧 `…` 选择，含义如下：
+
+| 顶部字段 | 应填写的路径 |
+| --- | --- |
+| `Python 3.9+` | 电脑 2 的 Python 可执行文件，例如 `C:\Python311\python.exe`；按本机实际安装位置填写 |
+| `配置文件` | 同步工具自己的 JSON 文件，例如 `C:\Users\你的用户名\git-sync\config.json`；首次保存时可自动创建 |
+
+如果出现 `Cannot run program "py"` / `CreateProcess error=2`，表示系统未找到你填写的启动程序。请在 PyCharm 的 Python Interpreter 设置中查看实际解释器路径，将第一行改为该 `python.exe` 文件的完整路径。`py` 只有在本机已安装 Python Launcher 且 IDE 能找到它时才能使用。
 
 进入「初始化 / 配置」页，填写：
 

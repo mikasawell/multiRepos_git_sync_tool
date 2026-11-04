@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>local.multirepo.sync</id>
   <name>Multi Repo Sync</name>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
   <vendor>Multi Repo Sync</vendor>
   <description><![CDATA[
     Pull-only GitHub file synchronization with reviewable differences, native IDE merge UI,

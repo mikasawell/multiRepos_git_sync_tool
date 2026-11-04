@@ -1,6 +1,6 @@
 # PyCharm / IDEA 插件使用说明
 
-安装包：[multi-repo-sync-0.2.0.zip](../dist/multi-repo-sync-0.2.0.zip)。目标最低版本为 **PyCharm / IDEA 2024.3（build 243，含 PyCharm 2024.3.2）**，编译字节码为 Java 21。同步引擎已随插件打包，电脑 2 仍需安装 **Python 3.9+ 和 Git 2.29+**。
+安装包：[multi-repo-sync-0.2.1.zip](../dist/multi-repo-sync-0.2.1.zip)。目标最低版本为 **PyCharm / IDEA 2024.3（build 243，含 PyCharm 2024.3.2）**，编译字节码为 Java 21。同步引擎已随插件打包，电脑 2 仍需安装 **Python 3.9+ 和 Git 2.29+**。
 
 ## 安装与打开
 
@@ -8,6 +8,10 @@
 2. 在 PyCharm 中打开 `Settings / Preferences → Plugins → 齿轮菜单 → Install Plugin from Disk…`，选择 ZIP。
 3. 按 IDE 提示重启。打开业务项目，从 `View → Tool Windows → Multi Repo Sync` 进入工具窗口。
 4. `Python` 填电脑 2 的解释器可执行文件路径。Windows 可用 `py` 或 `python.exe` 的完整路径；macOS/Linux 可用 `python3` 或绝对路径。不要在解释器路径后附加参数。
+
+顶部两项保持手动输入或用 `…` 选择：第一行 `Python 3.9+` 是解释器可执行文件，第二行 `配置文件` 是本工具的 JSON 设置文件。第二行可以填写如 `C:\Users\你的用户名\git-sync\config.json`，文件不存在时会在首次「保存初始化 / 修改」时创建。
+
+遇到 `Cannot run program "py"` / `CreateProcess error=2`，请从 PyCharm 的 Python Interpreter 设置查看实际解释器位置，手动将第一行改为 `python.exe` 的完整路径；不要把解释器路径填到第二行。插件只启动你填写的解释器，不自动扫描或替换 Python 环境。
 
 源码使用了 IntelliJ 平台公开的 [Tool Window](https://plugins.jetbrains.com/docs/intellij/tool-windows.html) 和 [Diff/Merge API](https://github.com/JetBrains/intellij-community/blob/master/platform/diff-api/src/com/intellij/diff/DiffRequestFactory.java)，无需把项目变成插件开发工程。
 
@@ -105,5 +109,13 @@ python3 jetbrains-plugin/build_plugin.py --ide-home /path/to/PyCharm.app/Content
 ```
 
 SDK 的 JBR 若不含 `javac`，添加 `--jdk-home /path/to/jdk-21-or-newer`。产物在 `dist/`。当前产物使用本机 IntelliJ 平台 SDK 编译，Java 21 字节码、最低 build 243；Python 同步行为通过本地临时仓库测试。**未在用户的 PyCharm 2024.3.2 实例中实际安装并进行 GUI 验证**，安装后应先在测试仓库完成一次检查与合并，再接入业务仓库。
+
+手动解释器启动、Windows 路径和 UTF-8 JSON 通信的 Java/Python 回归检查：
+
+```bash
+python3 jetbrains-plugin/test_runtime.py --ide-home /path/to/PyCharm.app/Contents
+```
+
+0.2.1 保留原字段名称和手动输入方式，补充解释器启动失败提示，并固定 Windows 管道的 UTF-8 编码，避免中文配置内容乱码。
 
 文件同步使用 Git 对象、临时索引和 `commit-tree` 生成本地单父提交，再以快进更新工作区，不引入来源的提交历史；它不执行常规 `git commit` 钩子，不自动运行项目测试，也不调用 `.gitattributes` 自定义合并驱动。项目过滤器和更新后的 Git `post-merge` 钩子仍按 Git 行为执行；有特殊提交规范时应先验证。
