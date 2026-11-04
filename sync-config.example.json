@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "interval_seconds": 60,
+  "git_timeout_seconds": 120,
+  "log_directory": "./logs",
+  "repositories": [
+    {
+      "name": "my-project",
+      "path": "/absolute/path/to/internal-project",
+      "source": "origin",
+      "source_branch": "main",
+      "target_branch": "internal",
+      "strategy": "snapshot",
+      "preserve_paths": ["config/internal/**", "*.local.yml"],
+      "enabled": true
+    }
+  ]
+}

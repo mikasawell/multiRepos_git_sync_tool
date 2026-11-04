@@ -1,0 +1,17 @@
+<idea-plugin>
+  <id>local.multirepo.sync</id>
+  <name>Multi Repo Sync</name>
+  <version>0.2.0</version>
+  <vendor>Multi Repo Sync</vendor>
+  <description><![CDATA[
+    Pull-only GitHub file synchronization with reviewable differences, native IDE merge UI,
+    preserved internal paths and configurable logs. Supports repositories with unrelated histories.
+    Requires local Python 3.9+ and Git 2.29+; never pushes or creates temporary branches.
+  ]]></description>
+  <idea-version since-build="243"/>
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="Multi Repo Sync" anchor="right" factoryClass="local.multirepo.sync.SyncToolWindowFactory"/>
+    <notificationGroup id="Multi Repo Sync" displayType="BALLOON"/>
+  </extensions>
+</idea-plugin>
